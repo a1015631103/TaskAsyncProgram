@@ -48,7 +48,7 @@ var continueTask = whenContinueFactory.ContinueWhenAll(new[] { testtask }, t1 =>
 {
     //接续任务
 
-});
+});   
 
 /*以下方法都会阻塞当前线程
  * Task的Wait，WaitAll，WaitAny等待可以设置超时时间，时间到了任务还没完成一样解除，继续往下执行
