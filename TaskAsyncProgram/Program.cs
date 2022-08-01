@@ -2,6 +2,13 @@
 //直接使用线程池
 ThreadPool.QueueUserWorkItem(s => Test.Go());
 
+Console.WriteLine("主线程:" + Thread.CurrentThread.ManagedThreadId);
+
+await Test.GoAsync();
+await Task.Run(() => { Console.WriteLine("Task.Run:" + Thread.CurrentThread.ManagedThreadId); });
+
+
+
 //使用任务并行库
 var t = new Task(() => { Test.Go(); });
 t.Start();
@@ -48,7 +55,7 @@ var continueTask = whenContinueFactory.ContinueWhenAll(new[] { testtask }, t1 =>
 {
     //接续任务
 
-});   
+});
 
 /*以下方法都会阻塞当前线程
  * Task的Wait，WaitAll，WaitAny等待可以设置超时时间，时间到了任务还没完成一样解除，继续往下执行
@@ -80,10 +87,11 @@ parentTask.Start();
 
 
 //异常处理最佳方式用接续方法，TaskContinuationOptions可以设置针对前任务是异常，取消，正常完成等待设置不同的接续任务
-Task<int> taskResult = Task.Run<int>(() => { 
+Task<int> taskResult = Task.Run<int>(() =>
+{
     //throw new Exception("运气太差");
     return 3;
-    });
+});
 taskResult.ContinueWith(t1 =>
 {
     Console.WriteLine("发生异常");

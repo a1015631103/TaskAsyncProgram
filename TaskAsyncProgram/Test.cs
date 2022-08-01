@@ -17,6 +17,12 @@ namespace TaskAsyncProgram
             Console.WriteLine(str.ToString());
         }
 
+        public static  Task GoAsync()
+        {
+            Console.WriteLine("GoAsync:" + Thread.CurrentThread.ManagedThreadId);
+            return Task.CompletedTask;
+        }
+
         public static async Task TestCompletedTaskAsync()
         {
             /*本质上来说是返回一个已经完成的Task对象，所以这时如果我们用await关键字去等待Task.CompletedTask，
@@ -24,7 +30,7 @@ namespace TaskAsyncProgram
             所以实际上await Task.CompletedTask之前和之后的代码是在同一个线程上同步执行的，通俗易懂的说就是单线程的
             */
             await Task.CompletedTask;
-    
+
             Console.WriteLine("TestCompletedTaskAsync的线程：" + Thread.CurrentThread.ManagedThreadId);
         }
 
