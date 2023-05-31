@@ -68,6 +68,15 @@ Console.WriteLine("TestCompletedTaskAsync后:" + Thread.CurrentThread.ManagedThr
 await Test.TestYieldAsync();
 Console.WriteLine("TestYieldAsync后:" + Thread.CurrentThread.ManagedThreadId);
 
+/*任务调度器的调度过程：
+l ) 如果任务是其他任务中创建的子任务 ，那么将该任务添加到运行父 任务的线
+程的本地队列，否则将任务添加到全局任务队列（线程池的调度总是添加到全局队
+列） 。 这会减少线程上下文切换的开销 。 如果不希望将任务添加到本地队列，可以指定
+TaskCreationOptions .PreferFaimess 或 TaskContinuationOptions.PreferFairness 枚举参数 。
+2) 线程搜索属千自己的本地队列中的任务，如果没有任务才去搜索全局任务队列 。
+3) 如果线程发现属于自己的本地队列中没有任务，并且全局任务队列中也没有任务 ，它
+有可能会去其他线程的本地队列的队尾偷取一个任务（工作窃取），这是线程池所没有的特性 。
+*/
 
 //任务的分子关系分为附加子任务和分离子任务，默认情况下是附加子任务,设置 附加子任务，因此主任务需要等待所有
 var parentTask = new Task<int>(() =>
